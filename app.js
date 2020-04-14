@@ -29,6 +29,7 @@ app.get("/", (req, res) => {
 			if (error) {
 				return res.render("error", {
 					title: "Error",
+					path: req.url,
 					error,
 				});
 			}
@@ -44,6 +45,7 @@ app.get("/", (req, res) => {
 					res.render("home", {
 						title: "home",
 						data: allData,
+						path: "/",
 					});
 				},
 			);
@@ -52,6 +54,7 @@ app.get("/", (req, res) => {
 		res.render("home", {
 			title: "Home",
 			data: undefined,
+			path: "/",
 		});
 	}
 });
@@ -60,6 +63,8 @@ app.get("/weather", (req, res) => {
 	if (!req.query.address) {
 		return res.send({
 			error: "There no query.",
+			fix: "add address query after /weather",
+			example: "/weather?address=dhaka",
 		});
 	}
 	//console.log(req.query.address);
@@ -75,6 +80,13 @@ app.get("/weather", (req, res) => {
 			const allData = { ...weatherData, ...geoData };
 			res.send(allData);
 		});
+	});
+});
+
+app.get("/about", (req, res) => {
+	res.render("about", {
+		title: "About",
+		path: "/about",
 	});
 });
 

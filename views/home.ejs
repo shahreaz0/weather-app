@@ -1,14 +1,22 @@
 <%- include('partials/top') %>
 
-<a href="/"><h1><%= title %></h1></a>
-<form method="GET" action="/">
-	<input type="text" name="address" placeholder="Location" />
-	<input type="submit" value="Go" />
-</form>
+<div class="ui container" id="head">
+	<h1>Weather App</h1>
+	<form class="ui massive form" method="GET" action="/">
+			<div class="field">
+				<input type="text" name="address" placeholder="Location" />
+			</div>
+		<input class="ui button massive" type="submit" value="Go" />
+  	</form>
 
-<% if(data) { %>
-<h1><%= data.temp_c %></h1>
-<% } %>
+	<% if(data) { %>
+		<h1><%= data.temp_c %>	&#8451;</h1>
+	<% } %>
+
+
+	
+
+</div>
 
 <!-- bottom---------------------- -->
 <%- include('partials/bottom') %>

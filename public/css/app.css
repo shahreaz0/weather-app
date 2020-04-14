@@ -1,0 +1,27 @@
+html {
+	font-size: 10px;
+}
+
+body {
+	color: #666 !important;
+}
+
+#head {
+	margin-top: 3rem;
+	text-align: center;
+}
+
+#head h1 {
+	font-size: 5rem;
+}
+
+.field input {
+	text-align: center;
+	color: #555 !important;
+	font-weight: 100;
+}
+
+.ui.massive.form {
+	width: 60%;
+	margin: 0 auto;
+}
