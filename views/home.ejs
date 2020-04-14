@@ -1,19 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title><%= title %></title>
-	</head>
-	<body>
-		<a href="/"><h1><%= title %></h1></a>
-		<form method="GET" action="/">
-			<input type="text" name="address" placeholder="Location" />
-			<input type="submit" value="Go" />
-		</form>
+<%- include('partials/top') %>
 
-		<% if(data) { %>
-		<h1><%= data.temp_c %></h1>
-		<% } %>
-	</body>
-</html>
+<a href="/"><h1><%= title %></h1></a>
+<form method="GET" action="/">
+	<input type="text" name="address" placeholder="Location" />
+	<input type="submit" value="Go" />
+</form>
+
+<% if(data) { %>
+<h1><%= data.temp_c %></h1>
+<% } %>
+
+<!-- bottom---------------------- -->
+<%- include('partials/bottom') %>
