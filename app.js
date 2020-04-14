@@ -27,7 +27,10 @@ app.get("/", (req, res) => {
 	if (req.query.address) {
 		geoLocation(req.query.address, (error, geoData) => {
 			if (error) {
-				return res.render("error", { title: "Error", error });
+				return res.render("error", {
+					title: "Error",
+					error,
+				});
 			}
 			//console.log(latitude, longitude);
 			weather(
@@ -55,7 +58,9 @@ app.get("/", (req, res) => {
 
 app.get("/weather", (req, res) => {
 	if (!req.query.address) {
-		return res.send({ error: "There no query." });
+		return res.send({
+			error: "There no query.",
+		});
 	}
 	//console.log(req.query.address);
 	geoLocation(req.query.address, (error, geoData) => {
@@ -74,7 +79,10 @@ app.get("/weather", (req, res) => {
 });
 
 app.get("*", (req, res) => {
-	res.status("404").send({ data: "undefined route", status: 404 });
+	res.status("404").send({
+		data: "undefined route",
+		status: 404,
+	});
 });
 
 /**
