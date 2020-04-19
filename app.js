@@ -25,31 +25,48 @@ app.use(express.static(path.join(__dirname, "public")));
 app.get("/", (req, res) => {
 	//console.log(req.query.address);
 	if (req.query.address) {
-		geoLocation(req.query.address, (error, geoData) => {
-			if (error) {
-				return res.render("error", {
+		//promise -------------------------------------------------->
+		geoLocation(req.query.address)
+			.then((geoData) => {
+				return weather(geoData.latitude, geoData.longitude);
+			})
+			.then((weatherData) => {
+				res.render("home", {
+					title: "home",
+					data: weatherData,
+					path: "/",
+				});
+			})
+			.catch((error) => {
+				res.render("error", {
 					title: "Error",
-					path: req.url,
+					path: undefined,
 					error,
 				});
-			}
-			//console.log(latitude, longitude);
-			weather(
-				geoData.latitude,
-				geoData.longitude,
-				(error, weatherData) => {
-					if (error) {
-						return res.render("error", { title: "Error", error });
-					}
-					const allData = { ...weatherData, ...geoData };
-					res.render("home", {
-						title: "home",
-						data: allData,
-						path: "/",
-					});
-				},
-			);
-		});
+			});
+
+		// Callback-------------------------------------------------->
+		// geoLocation(req.query.address, (error, geoData) => {
+		// 	if (error) {
+		// 		return res.render("error", { title: "Error", error });
+		// 	}
+		// 	//console.log(latitude, longitude);
+		// 	weather(
+		// 		geoData.latitude,
+		// 		geoData.longitude,
+		// 		(error, weatherData) => {
+		// 			if (error) {
+		// 				return res.render("error", { title: "Error", error });
+		// 			}
+		// 			const allData = { ...weatherData, ...geoData };
+		// 			res.render("home", {
+		// 				title: "home",
+		// 				data: allData,
+		// 				path: "/",
+		// 			});
+		// 		},
+		// 	);
+		// });
 	} else {
 		res.render("home", {
 			title: "Home",
@@ -67,20 +84,30 @@ app.get("/weather", (req, res) => {
 			example: "/weather?address=dhaka",
 		});
 	}
-	//console.log(req.query.address);
-	geoLocation(req.query.address, (error, geoData) => {
-		if (error) {
-			return res.send({ error });
-		}
-		//console.log(latitude, longitude);
-		weather(geoData.latitude, geoData.longitude, (error, weatherData) => {
-			if (error) {
-				return res.send({ error });
-			}
-			const allData = { ...weatherData, ...geoData };
-			res.send(allData);
-		});
-	});
+	// Promise ------------------------------------------------->
+	geoLocation(req.query.address)
+		.then((geoData) => {
+			return weather(geoData.latitude, geoData.longitude);
+		})
+		.then((weatherData) => {
+			res.send(weatherData);
+		})
+		.catch((err) => res.send({ err }));
+
+	// Callback ------------------------------------------------->
+	// geoLocation(req.query.address, (error, geoData) => {
+	// 	if (error) {
+	// 		return res.send({ error });
+	// 	}
+	// 	//console.log(latitude, longitude);
+	// 	weather(geoData.latitude, geoData.longitude, (error, weatherData) => {
+	// 		if (error) {
+	// 			return res.send({ error });
+	// 		}
+	// 		const allData = { ...weatherData, ...geoData };
+	// 		res.send(allData);
+	// 	});
+	// });
 });
 
 app.get("/about", (req, res) => {
