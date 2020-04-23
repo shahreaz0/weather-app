@@ -4,6 +4,19 @@ html {
 
 body {
 	color: #666 !important;
+	background: url(../img/background.jpg) no-repeat center center fixed !important;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover !important;
+}
+
+#nav {
+	background-color: #cbced7;
+}
+
+#head .header {
+	font-size: 3rem;
 }
 
 #head {
@@ -12,7 +25,11 @@ body {
 }
 
 #head h1 {
-	font-size: 5rem;
+	font-size: 1.5rem;
+}
+
+#head .err {
+	font-size: 2rem;
 }
 
 .field input {
@@ -24,4 +41,11 @@ body {
 .ui.massive.form {
 	width: 60%;
 	margin: 0 auto;
+}
+
+.ui.segment {
+	width: 60%;
+	margin: 1.8rem auto !important;
+	height: 4.5rem;
+	background-color: #cccfd8 !important;
 }

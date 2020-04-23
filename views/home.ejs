@@ -1,22 +1,28 @@
 <%- include('partials/top') %>
 
 <div class="ui container" id="head">
-	<h1>Weather App</h1>
+	<h1 class="header">Weather App</h1>
 	<form class="ui massive form" method="GET" action="/">
-			<div class="field">
-				<input type="text" name="address" placeholder="Location" />
-			</div>
+		<div class="field">
+			<input type="text" name="address" placeholder="Location" />
+		</div>
 		<input class="ui button massive" type="submit" value="Go" />
-  	</form>
+	</form>
 
 	<% if(data) { %>
-		<h1><%= data.temp_c %>	&#8451;</h1>
+	<div class="ui segment">
+
+		<%if(data.hasLocation) { %>
+		<h1><em class="address"><%= data.address %> -</em> <%= data.temp_c %> &#8451;</h1>
+		<% } else { %>
+		<h1 class="err">No location found.</h1>
+		<%} %>
+
+
+	</div>
 	<% } %>
 
 
-	
-
 </div>
 
-<!-- bottom---------------------- -->
 <%- include('partials/bottom') %>

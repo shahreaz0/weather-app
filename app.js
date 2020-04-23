@@ -22,61 +22,38 @@ app.use(express.static(path.join(__dirname, "public")));
  * ==============================
  */
 
-app.get("/", (req, res) => {
-	//console.log(req.query.address);
-	if (req.query.address) {
-		//promise -------------------------------------------------->
-		geoLocation(req.query.address)
-			.then((geoData) => {
-				return weather(geoData.latitude, geoData.longitude);
-			})
-			.then((weatherData) => {
-				res.render("home", {
-					title: "home",
-					data: weatherData,
-					path: "/",
-				});
-			})
-			.catch((error) => {
-				res.render("error", {
-					title: "Error",
-					path: undefined,
-					error,
-				});
-			});
-
-		// Callback-------------------------------------------------->
-		// geoLocation(req.query.address, (error, geoData) => {
-		// 	if (error) {
-		// 		return res.render("error", { title: "Error", error });
-		// 	}
-		// 	//console.log(latitude, longitude);
-		// 	weather(
-		// 		geoData.latitude,
-		// 		geoData.longitude,
-		// 		(error, weatherData) => {
-		// 			if (error) {
-		// 				return res.render("error", { title: "Error", error });
-		// 			}
-		// 			const allData = { ...weatherData, ...geoData };
-		// 			res.render("home", {
-		// 				title: "home",
-		// 				data: allData,
-		// 				path: "/",
-		// 			});
-		// 		},
-		// 	);
-		// });
-	} else {
-		res.render("home", {
+app.get("/", async (req, res) => {
+	if (!req.query.address) {
+		return res.render("home", {
 			title: "Home",
 			data: undefined,
 			path: "/",
 		});
 	}
+	//async
+	try {
+		const geoData = await geoLocation(req.query.address);
+		let weatherData;
+		if (geoData.hasLocation) {
+			weatherData = await weather(geoData.latitude, geoData.longitude);
+		}
+		const data = { ...geoData, ...weatherData };
+		res.render("home", {
+			title: "home",
+			data,
+			path: "/",
+		});
+	} catch (error) {
+		console.log(error);
+		res.render("error", {
+			title: "Error",
+			path: undefined,
+			error,
+		});
+	}
 });
 
-app.get("/weather", (req, res) => {
+app.get("/weather", async (req, res) => {
 	if (!req.query.address) {
 		return res.send({
 			error: "There no query.",
@@ -84,30 +61,22 @@ app.get("/weather", (req, res) => {
 			example: "/weather?address=dhaka",
 		});
 	}
-	// Promise ------------------------------------------------->
-	geoLocation(req.query.address)
-		.then((geoData) => {
-			return weather(geoData.latitude, geoData.longitude);
-		})
-		.then((weatherData) => {
-			res.send(weatherData);
-		})
-		.catch((err) => res.send({ err }));
 
-	// Callback ------------------------------------------------->
-	// geoLocation(req.query.address, (error, geoData) => {
-	// 	if (error) {
-	// 		return res.send({ error });
-	// 	}
-	// 	//console.log(latitude, longitude);
-	// 	weather(geoData.latitude, geoData.longitude, (error, weatherData) => {
-	// 		if (error) {
-	// 			return res.send({ error });
-	// 		}
-	// 		const allData = { ...weatherData, ...geoData };
-	// 		res.send(allData);
-	// 	});
-	// });
+	try {
+		let weatherData;
+		const geoData = await geoLocation(req.query.address);
+		if (geoData.hasLocation) {
+			const weatherData = await weather(
+				geoData.latitude,
+				geoData.longitude,
+			);
+		}
+		const data = { ...geoData, ...weatherData };
+
+		res.send(data);
+	} catch (error) {
+		res.send({ err });
+	}
 });
 
 app.get("/about", (req, res) => {
